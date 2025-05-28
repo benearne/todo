@@ -4,34 +4,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    clean: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './dist/index.html',
-    }),
-  ],
-  devServer: {
-    static: './dist',
-    open: true,
-    hot: true,
+    path: path.resolve(__dirname, 'dist'),
+    clean: true, // räumt den dist-Ordner vor jedem Build auf
   },
   mode: 'development',
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/template.html', // Unser HTML-Template
+    }),
+  ],
 };
