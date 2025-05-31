@@ -14,4 +14,12 @@ module.exports = {
       template: './src/template.html', // Unser HTML-Template
     }),
   ],
+   module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
 };

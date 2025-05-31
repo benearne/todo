@@ -1,0 +1,121 @@
+/* Basis-Layout */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f4f4;
+  color: #222;
+  padding: 2rem;
+  line-height: 1.5;
+}
+
+h1, h2 {
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+
+#todolist {
+  max-width: 600px;
+  margin: auto;
+}
+
+/* ToDo-Element */
+li.todo_element {
+  background-color: #fff;
+  border: 1px solid #e1e1e1;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+li.todo_element:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.info {
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 0.2rem;
+}
+
+/* Buttons */
+button {
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #444;
+  color: #fff;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #000;
+}
+
+.complete_bttn {
+  margin-top: 0.5rem;
+  background-color: #2ecc71;
+}
+
+.complete_bttn:hover {
+  background-color: #27ae60;
+}
+
+#new_todo,
+#new_project {
+  background-color: #3498db;
+  margin-bottom: 1rem;
+}
+
+#new_todo:hover,
+#new_project:hover {
+  background-color: #2980b9;
+}
+
+/* Formulare */
+form {
+  display: none;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  background: #fafafa;
+  transition: border 0.2s ease;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: #3498db;
+  outline: none;
+  background: #fff;
+}
+
+/* Responsives Verhalten */
+@media (max-width: 500px) {
+  body {
+    padding: 1rem;
+  }
+
+  form {
+    padding: 1rem;
+  }
+}

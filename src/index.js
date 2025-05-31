@@ -1,4 +1,5 @@
 import { Todo, Project } from "./classes.js"
+import './style.css';
 
 const allProjects = [];
 const allTodos = [];
