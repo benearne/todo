@@ -6,6 +6,36 @@
   <title>Mein Webpack-Projekt</title>
 <script defer src="bundle.js"></script></head>
 <body>
+  <div>
+    <div>new todo</div>
+    <button id="new_todo">new todo</button>
+    <form action="push" id="todoForm" style="display: none;">
+      <label for="title"></label>
+      <input type="text" id="title" placeholder="Titel" required>
+
+      <label for="description"></label>
+      <input type="text" id="description" placeholder="Description">
+
+      <label for="dueDate"></label>
+      <input type="date" id="dueDate">
+
+      <label for="priority"></label>
+        <select id="priority">
+          <option value="green">low</option>
+          <option value="yellow">middle</option>
+          <option value="red">high</option>
+        </select>
+
+      <label for="project"></label>
+      <input type="text" id="project" placeholder="project">
+
+      <button type="submit">Add Todo</button>
+    </form>
+  </div>
+  <div>
+    <div>new project</div>
+    <button id="new_project">new project</button>
+  </div>
   <div id="todolist">My TodoList</div>
 </body>
 </html>
