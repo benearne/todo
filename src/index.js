@@ -1,28 +1,31 @@
 import { Todo, Project } from "./classes.js"
 
 const allProjects = [];
-const defaultProject = new Project("Default", "", "green");
-addProjectList(defaultProject);
+const allTodos = [];
+
+const defaultProject = new Project("Default", "This is a descriptopn", "green");
+addToProjectList(defaultProject);
 
 
 const todo1 = new Todo("Wash the dishes", "There's a lot in the kitchen", "2025-05-18", "low", false, defaultProject);
 const todo2 = new Todo("second test todo", "This is a description", "2025-05-18", "middle", false, defaultProject);
 
-addTodoToPoject(todo1, defaultProject);
-addTodoToPoject(todo2, defaultProject);
+addToDoToProject(todo1, defaultProject);
+addToDoToProject(todo2, defaultProject);
 
 updateProjectDropdown();
 
-function addProjectList(project) {
+function addToProjectList(project) {
     allProjects.push(project)
 }
 
-function addTodoToPoject(todo, project) {
+function addToDoToProject(todo, project) {
     if (project === "") {
         project = defaultProject;
     }
     project.listOfOpenTodos.push(todo);
     todo.project = project;
+    allTodos.push(todo);
 }
 
 function completeTodo(todo) {
@@ -39,7 +42,7 @@ function completeTodo(todo) {
         project.listOfFinishedTodos.push(element);
     };
 
-    display(project);
+    displayAll();
 }
 
 function changeTodoTitle(todo, title) {
@@ -62,11 +65,11 @@ function deleteAllFinishedTodos(project) {
     project.listOfFinishedTodos.length = 0;
 }
 
-export function findTodoByTitle(title) {
-    return defaultProject.listOfOpenTodos.find(todo => todo.title === title);
+function findTodoByID(id) {
+    return allTodos.find(todo => todo.id === id);
 }
 
-export function findProjectByTitle(title) {
+function findProjectByTitle(title) {
     return allProjects.find(project => project.title === title) || defaultProject;
 }
 
@@ -89,11 +92,7 @@ function updateProjectDropdown() {
 
 function display(project) {
 
-    // remove everything
     const list = document.getElementById("todolist");
-    list.innerHTML = "";
-
-    console.log(project.listOfOpenTodos)
 
     // header
     const header = document.createElement("h1");
@@ -102,7 +101,7 @@ function display(project) {
 
     // unfinished list
     const openLabel = document.createElement("h2");
-    openLabel.textContent = "open tasks:";
+    openLabel.textContent = "open tasks";
     list.appendChild(openLabel);
 
     if (project.listOfOpenTodos.length === 0) {
@@ -110,12 +109,12 @@ function display(project) {
     }
 
     // hide if empty
-    header.style.display = "block";
-    openLabel.style.display = "block";
-    if (project.listOfFinishedTodos.length === 0 && project.listOfOpenTodos.length === 0) {
-        header.style.display = "none";
-        openLabel.style.display = "none";
-    }
+    // header.style.display = "block";
+    // openLabel.style.display = "block";
+    // if (project.listOfFinishedTodos.length === 0 && project.listOfOpenTodos.length === 0) {
+    //     header.style.display = "none";
+    //     openLabel.style.display = "none";
+    // }
 
     const topOp = document.createElement("ul");
     list.appendChild(topOp);
@@ -141,7 +140,7 @@ function display(project) {
         const completeBttn = document.createElement("button");
         completeBttn.textContent = "completed";
         completeBttn.classList.add("complete_bttn");
-        completeBttn.setAttribute("data-title", task.title)
+        completeBttn.setAttribute("data-id", task.id);
         title.appendChild(completeBttn);
     };
     
@@ -149,15 +148,15 @@ function display(project) {
     const compBttns = document.querySelectorAll(".complete_bttn");
     compBttns.forEach(bttn => {
         bttn.addEventListener("click", (event) => {
-            const title = event.target.dataset.title;
-            const todo = findTodoByTitle(title);
+            const id = event.target.dataset.id;
+            const todo = findTodoByID(id);
             completeTodo(todo);
         })
     });
 
     // finished list
     const finishedLabel = document.createElement("h2");
-    finishedLabel.textContent = "finished tasks:";
+    finishedLabel.textContent = "finished tasks";
     list.appendChild(finishedLabel);
 
     finishedLabel.style.display = "none";
@@ -197,9 +196,23 @@ function display(project) {
 
     removeFinBttn.addEventListener("click", () => {
         deleteAllFinishedTodos(project);
-        display(project);
+        displayAll();
     });
 };
+
+// show all projects
+function displayAll() {
+    // remove everything
+    const list = document.getElementById("todolist");
+    list.innerHTML = "";
+    // display every project
+    list.innerHTML = "";
+    for (const project of allProjects) {
+        display(project);
+    }
+}
+
+displayAll();
 
 
 // Todo Form
@@ -219,11 +232,11 @@ formTodo.addEventListener("submit", function (event) {
         return;
     }
     const selectedProject = findProjectByTitle(projectName);
-    const newTodo = new Todo(title, description, dueDate, priority, selectedProject);
+    const newTodo = new Todo(title, description, dueDate, priority, false, selectedProject);
 
-    addTodoToPoject(newTodo, selectedProject);
+    addToDoToProject(newTodo, selectedProject);
 
-    display(selectedProject);
+    displayAll();
     formTodo.reset();
     formTodo.style.display = "none";
 })
@@ -250,8 +263,9 @@ formProject.addEventListener("submit", function (event) {
     };
     
     const newProject = new Project(title, description, category);
-    addProjectList(newProject);
+    addToProjectList(newProject);
     updateProjectDropdown(); 
+    displayAll();
     formProject.reset();
     formProject.style.display = "none";
 })
@@ -262,7 +276,6 @@ newProjectBttn.addEventListener("click", function () {
 })
 
 
-// show all proejects
-for (const project of allProjects) {
-    display(project);
-}
+
+
+
