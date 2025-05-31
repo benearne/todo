@@ -1,5 +1,21 @@
 import { Todo, Project } from "./classes.js"
-import { display } from "./display.js"
+
+const allProjects = [];
+const defaultProject = new Project("Default", "", "green");
+addProjectList(defaultProject);
+
+
+const todo1 = new Todo("Wash the dishes", "There's a lot in the kitchen", "2025-05-18", "low", false, defaultProject);
+const todo2 = new Todo("second test todo", "This is a description", "2025-05-18", "middle", false, defaultProject);
+
+addTodoToPoject(todo1, defaultProject);
+addTodoToPoject(todo2, defaultProject);
+
+updateProjectDropdown();
+
+function addProjectList(project) {
+    allProjects.push(project)
+}
 
 function addTodoToPoject(todo, project) {
     if (project === "") {
@@ -9,7 +25,7 @@ function addTodoToPoject(todo, project) {
     todo.project = project;
 }
 
-export function completeTodo(todo) {
+function completeTodo(todo) {
     todo.complete = true;
 
     const project = todo.project;
@@ -23,10 +39,7 @@ export function completeTodo(todo) {
         project.listOfFinishedTodos.push(element);
     };
 
-    console.log(todo.project.listOfOpenTodos);
-    console.log(todo.project.listOfFinishedTodos);
-
-    display(todo.project);
+    display(project);
 }
 
 function changeTodoTitle(todo, title) {
@@ -57,14 +70,142 @@ export function findProjectByTitle(title) {
     return allProjects.find(project => project.title === title) || defaultProject;
 }
 
-const defaultProject = new Project("All Tasks", "", "green");
-const allProjects = [defaultProject];
+function updateProjectDropdown() {
+    const dropdown = document.getElementById("project");
 
-display(defaultProject)
+    // Erst leeren
+    dropdown.innerHTML = "";
 
-const form = document.getElementById("todoForm");
+    // Für jedes Projekt eine Option hinzufügen
+    for (const project of allProjects) {
+        const option = document.createElement("option");
+        option.value = project.title;
+        option.textContent = project.title;
+        dropdown.appendChild(option);
+    }
+}
 
-form.addEventListener("submit", function (event) {
+//display
+
+function display(project) {
+
+    // remove everything
+    const list = document.getElementById("todolist");
+    list.innerHTML = "";
+
+    console.log(project.listOfOpenTodos)
+
+    // header
+    const header = document.createElement("h1");
+    header.textContent = project.title;
+    list.appendChild(header);
+
+    // unfinished list
+    const openLabel = document.createElement("h2");
+    openLabel.textContent = "open tasks:";
+    list.appendChild(openLabel);
+
+    if (project.listOfOpenTodos.length === 0) {
+        openLabel.textContent = "No open tasks";
+    }
+
+    // hide if empty
+    header.style.display = "block";
+    openLabel.style.display = "block";
+    if (project.listOfFinishedTodos.length === 0 && project.listOfOpenTodos.length === 0) {
+        header.style.display = "none";
+        openLabel.style.display = "none";
+    }
+
+    const topOp = document.createElement("ul");
+    list.appendChild(topOp);
+
+    // each open todo
+    for (const task of project.listOfOpenTodos) {
+        const title = document.createElement("li");
+        title.textContent = task.title;
+        title.classList.add("todo_element")
+        topOp.appendChild(title);
+
+        const date = document.createElement("div");
+        date.textContent = task.dueDate;
+        date.classList.add("info")
+        title.appendChild(date);
+
+        const prio = document.createElement("div");
+        prio.textContent = task.priority;
+        prio.classList.add("info")
+        title.appendChild(prio);
+
+        // complete Button
+        const completeBttn = document.createElement("button");
+        completeBttn.textContent = "completed";
+        completeBttn.classList.add("complete_bttn");
+        completeBttn.setAttribute("data-title", task.title)
+        title.appendChild(completeBttn);
+    };
+    
+    // event listeners for complete buttns
+    const compBttns = document.querySelectorAll(".complete_bttn");
+    compBttns.forEach(bttn => {
+        bttn.addEventListener("click", (event) => {
+            const title = event.target.dataset.title;
+            const todo = findTodoByTitle(title);
+            completeTodo(todo);
+        })
+    });
+
+    // finished list
+    const finishedLabel = document.createElement("h2");
+    finishedLabel.textContent = "finished tasks:";
+    list.appendChild(finishedLabel);
+
+    finishedLabel.style.display = "none";
+    if (project.listOfFinishedTodos.length !== 0) {
+        finishedLabel.style.display = "block";
+    }
+
+    const topFin = document.createElement("ul");
+    list.appendChild(topFin);
+
+    // each finished todo
+    for (const task of project.listOfFinishedTodos) {
+        const title = document.createElement("li");
+        title.textContent = task.title;
+        title.classList.add("todo_element")
+        topFin.appendChild(title);
+
+        const date = document.createElement("div");
+        date.textContent = task.dueDate;
+        date.classList.add("info")
+        title.appendChild(date);
+
+        const prio = document.createElement("div");
+        prio.textContent = task.priority;
+        prio.classList.add("info")
+        title.appendChild(prio);
+    };
+
+    const removeFinBttn = document.createElement("button");
+    removeFinBttn.textContent = "remove all";
+    list.appendChild(removeFinBttn);
+
+    removeFinBttn.style.display = "none";
+    if (project.listOfFinishedTodos.length !== 0) {
+        removeFinBttn.style.display = "block";
+    }
+
+    removeFinBttn.addEventListener("click", () => {
+        deleteAllFinishedTodos(project);
+        display(project);
+    });
+};
+
+
+// Todo Form
+const formTodo = document.getElementById("todoForm");
+
+formTodo.addEventListener("submit", function (event) {
     event.preventDefault();
 
     const title = document.getElementById("title").value.trim();
@@ -83,11 +224,45 @@ form.addEventListener("submit", function (event) {
     addTodoToPoject(newTodo, selectedProject);
 
     display(selectedProject);
-    form.reset();
-    form.style.display = "none";
+    formTodo.reset();
+    formTodo.style.display = "none";
 })
+
 
 const newtodoBttn = document.getElementById("new_todo");
 newtodoBttn.addEventListener("click", function () {
-    form.style.display = "block";
+    formTodo.style.display = "block";
 })
+
+// Project Form
+const formProject = document.getElementById("projectForm")
+
+formProject.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const title = document.getElementById("titlePr").value.trim();
+    const description = document.getElementById("descriptionPr").value.trim();
+    const category = document.getElementById("categoryPr").value;
+
+    if (title === "") {
+        alert("Title required!");
+        return;
+    };
+    
+    const newProject = new Project(title, description, category);
+    addProjectList(newProject);
+    updateProjectDropdown(); 
+    formProject.reset();
+    formProject.style.display = "none";
+})
+
+const newProjectBttn = document.getElementById("new_project");
+newProjectBttn.addEventListener("click", function () {
+    formProject.style.display = "block";
+})
+
+
+// show all proejects
+for (const project of allProjects) {
+    display(project);
+}

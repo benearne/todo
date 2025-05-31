@@ -2,7 +2,7 @@ export class Todo {
     constructor(title, description, dueDate, priority, project) {
         this.title = title;
         this.description = description;
-        this.dueDate = dueDate;
+        this.dueDate = new Date(dueDate);
         this.priority = priority;
         this.complete = false;
         this.project = project;
@@ -14,7 +14,7 @@ export class Project {
         this.title = title;
         this.description = description;
         this.category = category;
-        this.listOfOpenTodos = [];
+        this.listOfOpenTodos= [];
         this.listOfFinishedTodos = [];
     }
 }

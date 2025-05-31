@@ -9,9 +9,10 @@
   <div>
     <div>new todo</div>
     <button id="new_todo">new todo</button>
+    <!-- Todo Form -->
     <form action="push" id="todoForm" style="display: none;">
       <label for="title"></label>
-      <input type="text" id="title" placeholder="Titel" required>
+      <input type="text" id="title" placeholder="Title" required>
 
       <label for="description"></label>
       <input type="text" id="description" placeholder="Description">
@@ -27,9 +28,22 @@
         </select>
 
       <label for="project"></label>
-      <input type="text" id="project" placeholder="project">
+      <select id="project" name="project"></select>
 
       <button type="submit">Add Todo</button>
+    </form>
+    <!-- Project Form -->
+    <form action="push" id="projectForm" style="display: none;">
+      <label for="titlePr"></label>
+      <input type="text" id="titlePr" placeholder="Project Title" required>
+
+      <label for="descriptionPr"></label>
+      <input type="text" id="descriptionPr" placeholder="Description" required>
+
+      <label for="categoryPr"></label>
+      <input type="text" id="categoryPr" placeholder="Category" required>
+
+      <button type="submit">Add Project</button>
     </form>
   </div>
   <div>
